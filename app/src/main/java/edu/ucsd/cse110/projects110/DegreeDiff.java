@@ -24,13 +24,6 @@ public class DegreeDiff {
 
         return (float) angle;
     }
-    public static void main(String[] args){
-        Pair<Double,Double> SAN = new Pair<>(33.0, -117.0);
-        Pair<Double,Double> BOS = new Pair<>(42.0,-71.0);
-        System.out.println(SAN.second);
-        float result = calculateAngle(SAN, BOS);
-        System.out.println(result);
-    }
 }
 
 
