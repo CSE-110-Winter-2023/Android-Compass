@@ -26,8 +26,16 @@ public class MainActivity extends AppCompatActivity {
         imageView.setVisibility(View.INVISIBLE);
         if(ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)!= PackageManager.PERMISSION_GRANTED &&
                 ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)!= PackageManager.PERMISSION_GRANTED){
+
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION},200);
         }
+
+
+        /*timeService = new TimeService();
+        TextView textView1 = findViewById(R.id.textView3);
+        timeService.getTime().observe(this,time->{
+            textView1.setText(Long.toString(time));
+        });**/
 
         locationService= LocationService.singleton(this);
 
@@ -36,31 +44,28 @@ public class MainActivity extends AppCompatActivity {
         locationService.getLocation().observe(this,loc->{
             textView.setText(Double.toString(loc.first)+" , "+Double.toString(loc.second));
         });
-        /*
-        timeService = new TimeService();
-        TextView textView1 = findViewById(R.id.textView3);
-        timeService.getTime().observe(this,time->{
-            textView1.setText(Long.toString(time));
-        });**/
 
         SharedPreferences preferences = getSharedPreferences("pref",MODE_PRIVATE);
         String parentLat=preferences.getString("PLatitude","");
         String parentLong=preferences.getString("PLongitude","");
-        TextView hello2= findViewById(R.id.hello2);
-        MutableLiveData<Pair<Double,Double>> parentsLocation = new MutableLiveData<Pair<Double, Double>>() {
-        };
-        parentsLocation.postValue(new Pair<>(Double.parseDouble(parentLat), Double.parseDouble(parentLong)));
-        LiveData<Pair<Double,Double>> curr= locationService.getLocation();
-        parentsLocation.observe(this, pairP -> {
-            curr.observe(this, pairC -> {
-                float PAngle = DegreeDiff.calculateAngle(pairC,pairP);
-                hello2.setText("Parent's Home Location");
-                imageView.setRotation(PAngle-90f);
-                imageView.setVisibility(View.VISIBLE);
+        if(parentLat.equals("")||parentLong.equals("")) {
+        }
+        else {
+            TextView hello2 = findViewById(R.id.hello2);
+            MutableLiveData<Pair<Double,Double>> parentsLocation = new MutableLiveData<Pair<Double, Double>>() {
+            };
+            parentsLocation.postValue(new Pair<>(Double.parseDouble(parentLat), Double.parseDouble(parentLong)));
+            LiveData<Pair<Double,Double>> curr= locationService.getLocation();
+            parentsLocation.observe(this, pairP -> {
+                curr.observe(this, pairC -> {
+                    float PAngle = DegreeDiff.calculateAngle(pairC,pairP);
+                    hello2.setText("Parent's Home Location");
+                    imageView.setRotation(PAngle-90);
+                    imageView.setVisibility(View.VISIBLE);
+                });
+
             });
-
-        });
-
+        }
 
     }
 
