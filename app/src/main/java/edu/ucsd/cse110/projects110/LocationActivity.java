@@ -4,8 +4,11 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.EditText;
+import android.widget.TextView;
 
 
 public class LocationActivity extends AppCompatActivity {
@@ -14,6 +17,20 @@ public class LocationActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_location);
+        LoadProfile();
+    }
+
+    public void LoadProfile() {
+        SharedPreferences preferences = getSharedPreferences("pref",MODE_PRIVATE);
+
+        TextView ParentLabel = findViewById(R.id.ParentLocation);
+        ParentLabel.setText("Set " + preferences.getString("Parent_Label", "Parent") + "'s Location");
+
+        TextView FriendLabel = findViewById(R.id.FriendLocation);
+        FriendLabel.setText("Set " + preferences.getString("Friend_Label", "Friend") + "'s Location");
+
+        TextView AddressLabel = findViewById(R.id.AddressLocation);
+        AddressLabel.setText("Set " + preferences.getString("Address_Label", "Home") + "'s Location");
     }
 
     public void onExitClicked(View view) {

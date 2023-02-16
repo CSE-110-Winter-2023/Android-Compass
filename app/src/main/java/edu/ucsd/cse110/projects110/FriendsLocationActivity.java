@@ -9,6 +9,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 
 public class FriendsLocationActivity extends AppCompatActivity {
 
@@ -44,6 +45,7 @@ public class FriendsLocationActivity extends AppCompatActivity {
         String longitude= preferences.getString("FLongitude","");
         LongView.setText(longitude);
     }
+
     public void saveProfile() {
         SharedPreferences preferences = getSharedPreferences("pref",MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
