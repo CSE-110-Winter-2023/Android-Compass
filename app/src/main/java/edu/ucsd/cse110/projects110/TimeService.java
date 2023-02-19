@@ -28,4 +28,14 @@ public class TimeService {
     public MutableLiveData<Long> getTime() {
         return this.timeValue;
     }
+    public void unregisterTimeListener(){
+        this.clockFuture.cancel(true);
+    }
+
+    public void setMockTimeSource(MutableLiveData<Long>  mockTimeSource){
+        unregisterTimeListener();
+        this.timeValue=mockTimeSource;
+    }
+
+
 }

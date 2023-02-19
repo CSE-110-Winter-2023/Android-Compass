@@ -42,6 +42,7 @@ public class LocationService implements LocationListener {
                 ActivityCompat.checkSelfPermission(activity,
                         Manifest.permission.ACCESS_COARSE_LOCATION)!=
                         PackageManager.PERMISSION_GRANTED){
+
             throw new IllegalStateException("App needs location " +
                     "permission to access latest location");
 

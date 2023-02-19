@@ -24,7 +24,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="26dp"
         android:onClick="onParentsClicked"
-        android:text="Set Parent's Location"
+        android:text="Set Parent's house Location"
         app:layout_constraintBottom_toTopOf="@+id/AddressLocation"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

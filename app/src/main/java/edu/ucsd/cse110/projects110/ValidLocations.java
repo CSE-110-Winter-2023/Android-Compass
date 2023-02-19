@@ -1,6 +1,6 @@
 package edu.ucsd.cse110.projects110;public
 
-class ValidLocations {
+class   ValidLocations {
     public static Double minLong =(double)-180;
     public static Double maxLong =(double)180;
     public static boolean isValidDouble(String str) {

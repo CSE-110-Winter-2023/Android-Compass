@@ -24,13 +24,14 @@ public class LocationActivity extends AppCompatActivity {
         SharedPreferences preferences = getSharedPreferences("pref",MODE_PRIVATE);
 
         TextView ParentLabel = findViewById(R.id.ParentLocation);
-        ParentLabel.setText("Set " + preferences.getString("Parent_Label", "Parent") + "'s Location");
-
+        ParentLabel.setText("Set Parents' Location");
+        //+ preferences.getString("Parent_Label", "Parent") +
         TextView FriendLabel = findViewById(R.id.FriendLocation);
-        FriendLabel.setText("Set " + preferences.getString("Friend_Label", "Friend") + "'s Location");
-
+        FriendLabel.setText("Set Friend's Location");
+        //" + preferences.getString("Friend_Label", "Friend") + "
         TextView AddressLabel = findViewById(R.id.AddressLocation);
-        AddressLabel.setText("Set " + preferences.getString("Address_Label", "Home") + "'s Location");
+        AddressLabel.setText("Set Current Address");
+               // + preferences.getString("Address_Label", "Home") + "
     }
 
     public void onExitClicked(View view) {
