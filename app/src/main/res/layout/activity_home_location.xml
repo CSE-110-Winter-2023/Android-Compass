@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".HomeLocationActivity">
+
+    <EditText
+        android:id="@+id/ParentsLat"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="127dp"
+        android:ems="10"
+        android:hint="Latitude with Direction"
+        android:textIsSelectable="true"
+        android:inputType="textPersonName"
+        android:text=""
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/ParentsLong"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="72dp"
+        android:ems="10"
+        android:hint="Longitude with Direction"
+        android:textIsSelectable="true"
+        android:inputType="textPersonName"
+        android:text=""
+        app:layout_constraintStart_toStartOf="@+id/ParentsLat"
+        app:layout_constraintTop_toBottomOf="@+id/ParentsLat" />
+
+    <Button
+        android:id="@+id/SaveParents"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="41dp"
+        android:layout_marginBottom="262dp"
+        android:onClick="onSavePClicked"
+        android:text="Save"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/ExitToHome" />
+
+    <Button
+        android:id="@+id/ExitToLocation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:onClick="onExitPClicked"
+        android:text="Exit"
+        app:layout_constraintStart_toStartOf="@+id/SaveParents"
+        app:layout_constraintTop_toBottomOf="@+id/SaveParents" />
+
+    <Button
+        android:id="@+id/ExitToHome"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="37dp"
+        android:onClick="onBackHomeClicked"
+        android:text="Exit to Compass"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ExitToLocation" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
