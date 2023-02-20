@@ -64,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
         float orientation = Float.parseFloat(orientationString);
 
        orientationService.getOrientation().observe(this,Ori->{
-           textViewO.setText(String.format("CurrentOrientation: %.2f",orientation - (Ori * 180 / Math.PI)));
+           textViewO.setText(String.format("Current Orientation: %.2f",orientation - (Ori * 180 / Math.PI)));
            currOri=orientation * (Math.PI / 180) - Ori;
         });
 
@@ -172,10 +172,12 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    /*
    @Override
     public void onPause(){
         super.onPause();
         orientationService.unregisterSensorListener();
     }
+    */
 
 }
