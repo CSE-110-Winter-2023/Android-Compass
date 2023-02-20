@@ -60,18 +60,12 @@ public class MainActivity extends AppCompatActivity {
             textView.setText(setCurrLoc);
         });
 
-        String orientationString = preferences.getString("Orientation", "");
+        String orientationString = preferences.getString("Orientation", "0");
         float orientation = Float.parseFloat(orientationString);
 
        orientationService.getOrientation().observe(this,Ori->{
-           if (orientation != 0) {
-               textViewO.setText(String.format("CurrentOrientation: %.2f",orientation));
-               currOri=orientation * (Math.PI / 180);
-           }
-           else {
-               textViewO.setText(String.format("CurrentOrientation: %.2f",Ori));
-               currOri=Ori * (Math.PI / 180);
-           }
+           textViewO.setText(String.format("CurrentOrientation: %.2f",orientation - (Ori * 180 / Math.PI)));
+           currOri=orientation * (Math.PI / 180) - Ori;
         });
 
         //parent
@@ -178,10 +172,10 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-   /* @Override
+   @Override
     public void onPause(){
         super.onPause();
         orientationService.unregisterSensorListener();
-    }**/
+    }
 
 }
