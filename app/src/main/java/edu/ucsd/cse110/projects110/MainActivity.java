@@ -37,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
 
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION},200);
         }
+        SharedPreferences preferences = getSharedPreferences("pref",MODE_PRIVATE);
         ImageView ParentArrow = findViewById(R.id.parent_arrow);
         ImageView FriendArrow = findViewById(R.id.friend_arrow);
         ImageView AddrArrow = findViewById(R.id.addr_arrow);
@@ -64,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
             currOri=Ori;
         });
 
-        SharedPreferences preferences = getSharedPreferences("pref",MODE_PRIVATE);
+
 
         //parent
 
