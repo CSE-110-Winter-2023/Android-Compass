@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 
 public class LocationActivity extends AppCompatActivity {
+    LoadAndSave lS= new OrientationLoadAndSave();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,12 +34,7 @@ public class LocationActivity extends AppCompatActivity {
         AddressLabel.setText("Set Current Address");
         // + preferences.getString("Address_Label", "Home") + "
 
-        TextView OrientationText= findViewById(R.id.Orientation);
-        String orientation = preferences.getString("Orientation","");
-        OrientationText.setText(orientation);
-
-        TextView OrientationButton = findViewById(R.id.setOrientation);
-        OrientationButton.setText("Set Orientation");
+        lS.loadProfile(this);
     }
 
     public void onExitClicked(View view) {
@@ -62,22 +58,7 @@ public class LocationActivity extends AppCompatActivity {
     }
 
     public void onSetOrientationClicked(View view) {
-        SharedPreferences preferences = getSharedPreferences("pref",MODE_PRIVATE);
-        SharedPreferences.Editor editor = preferences.edit();
-        TextView orientationInput = findViewById(R.id.Orientation);
-        boolean validOrientation = ValidLocations.isValidFloat(orientationInput.getText().toString());
-        if (validOrientation) {
-            if(!orientationInput.getText().toString().equals("")) {
-                editor.putString("Orientation", orientationInput.getText().toString());
-            }
-            else{
-                editor.putString("Orientation", "Orientation");
-            }
-            editor.apply();
-        }
-        else {
-            Alert.showAlert("Please enter a Valid Orientation Degree",this);
-        }
+        lS.saveProfile(this);
     }
 
     //we can have more input
