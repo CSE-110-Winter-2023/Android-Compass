@@ -11,16 +11,16 @@ import android.view.View;
 import android.widget.EditText;
 
 public class MyAddressActivity extends AppCompatActivity {
-
+    LoadAndSave lS= new CurrentAddressLoadAndSave();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_address);
-        LoadProfile();
+        lS.loadProfile(this);
     }
 
     public void onSaveAClicked(View view) {
-        saveProfile();
+        lS.saveProfile(this);
     }
 
     public void onExitAClicked(View view) {
@@ -32,7 +32,7 @@ public class MyAddressActivity extends AppCompatActivity {
         Intent intent = new Intent(this,MainActivity.class);
         startActivity(intent);
     }
-
+/**
     public void LoadProfile() {
         SharedPreferences preferences = getSharedPreferences("pref",MODE_PRIVATE);
         EditText LatView= findViewById(R.id.AddressLat);
@@ -69,5 +69,5 @@ public class MyAddressActivity extends AppCompatActivity {
                 });
         AlertDialog alert = builder.create();
         alert.show();
-    }
+    }**/
 }

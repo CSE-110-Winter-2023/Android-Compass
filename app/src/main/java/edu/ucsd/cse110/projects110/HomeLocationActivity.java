@@ -11,18 +11,27 @@ import android.view.View;
 import android.widget.EditText;
 
 public class HomeLocationActivity extends AppCompatActivity {
-
+    LoadAndSave lS= new ParentsLoadAndSave();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_location);
-        LoadProfile();
+        lS.loadProfile(this);
     }
 
     public void onSavePClicked(View view) {
-        saveProfile();
+        lS.saveProfile(this);
     }
-    public void LoadProfile() {
+    public void onExitPClicked(View view) {
+        Intent intent = new Intent(this,LocationActivity.class);
+        startActivity(intent);
+    }
+
+    public void onBackHomeClicked(View view) {
+        Intent intent = new Intent(this,MainActivity.class);
+        startActivity(intent);
+    }
+    /**public void LoadProfile() {
         SharedPreferences preferences = getSharedPreferences("pref",MODE_PRIVATE);
         EditText LatView= findViewById(R.id.ParentsLat);
         String latitude= preferences.getString("PLatitude","");
@@ -59,14 +68,6 @@ public class HomeLocationActivity extends AppCompatActivity {
                 });
         AlertDialog alert = builder.create();
         alert.show();
-    }
-    public void onExitPClicked(View view) {
-        Intent intent = new Intent(this,LocationActivity.class);
-        startActivity(intent);
-    }
+    }*/
 
-    public void onBackHomeClicked(View view) {
-        Intent intent = new Intent(this,MainActivity.class);
-        startActivity(intent);
-    }
 }

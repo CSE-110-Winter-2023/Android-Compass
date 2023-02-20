@@ -12,16 +12,17 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 public class FriendsLocationActivity extends AppCompatActivity {
+    LoadAndSave lS= new FriendsLoadAndSave();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_friends_location);
-        LoadProfile();
+        lS.loadProfile(this);
     }
 
     public void onSaveFClicked(View view) {
-        saveProfile();
+        lS.saveProfile(this);
     }
 
     public void onExitFClicked(View view){
@@ -36,7 +37,7 @@ public class FriendsLocationActivity extends AppCompatActivity {
     }
 
 
-    public void LoadProfile() {
+    /**public void LoadProfile() {
         SharedPreferences preferences = getSharedPreferences("pref",MODE_PRIVATE);
         EditText LatView= findViewById(R.id.FriendsLat);
         String latitude= preferences.getString("FLatitude","");
@@ -74,5 +75,5 @@ public class FriendsLocationActivity extends AppCompatActivity {
                 });
         AlertDialog alert = builder.create();
         alert.show();
-    }
+    }*/
 }
