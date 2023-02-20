@@ -36,4 +36,5 @@ public class ExampleUnitTest {
         assertTrue(ValidLocations.isValidLat(validLat));
         assertFalse(ValidLocations.isValidLat(invalidLat));
     }
+
 }
