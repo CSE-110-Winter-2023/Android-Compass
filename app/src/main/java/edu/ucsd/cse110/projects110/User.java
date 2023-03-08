@@ -33,7 +33,7 @@ public class User {
 
     /** General constructor for a note. */
     public User(@NonNull String id, @NonNull String Name, double lat
-    ,double Long) {
+            ,double Long) {
         this.UID=id;
         this.name = Name;
         this.Long=Long;

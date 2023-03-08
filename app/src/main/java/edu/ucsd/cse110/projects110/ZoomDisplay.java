@@ -52,8 +52,7 @@ public class ZoomDisplay {
             Circle4LayoutParams.height = 1100;
 
             counter.setText("Displaying 500+ Mile Radius");
-        }
-        else if (zoomFactor == 1) {
+        } else if (zoomFactor == 1) {
             //show first 3 rings
             Circle1Layout.setVisibility(View.VISIBLE);
             Circle2Layout.setVisibility(View.VISIBLE);
@@ -69,8 +68,7 @@ public class ZoomDisplay {
             Circle3LayoutParams.height = 1075;
 
             counter.setText("Displaying up to 500 Mile Radius");
-        }
-        else if (zoomFactor == 2) {
+        } else if (zoomFactor == 2) {
             //show first 2 rings
             Circle1Layout.setVisibility(View.VISIBLE);
             Circle2Layout.setVisibility(View.VISIBLE);
@@ -84,8 +82,7 @@ public class ZoomDisplay {
             Circle2LayoutParams.height = 1050;
 
             counter.setText("Displaying up to 10 Mile Radius");
-        }
-        else if (zoomFactor == 3){
+        } else if (zoomFactor == 3) {
             //show first ring
             Circle1Layout.setVisibility(View.VISIBLE);
             Circle2Layout.setVisibility(View.GONE);
@@ -105,6 +102,4 @@ public class ZoomDisplay {
         Circle3Layout.setLayoutParams(Circle3LayoutParams);
         Circle4Layout.setLayoutParams(Circle4LayoutParams);
     }
-
-
 }
