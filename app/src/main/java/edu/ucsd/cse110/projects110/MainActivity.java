@@ -38,20 +38,26 @@ public class MainActivity extends AppCompatActivity {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION},200);
         }
         SharedPreferences preferences = getSharedPreferences("pref",MODE_PRIVATE);
+
+        /*
+
         ImageView ParentArrow = findViewById(R.id.parent_arrow);
         ImageView FriendArrow = findViewById(R.id.friend_arrow);
         ImageView AddrArrow = findViewById(R.id.addr_arrow);
         ParentArrow.setVisibility(View.INVISIBLE);
         FriendArrow.setVisibility(View.INVISIBLE);
         AddrArrow.setVisibility(View.INVISIBLE);
-        orientationService=OrientationService.singleton(this);
 
         /*timeService = new TimeService();
         TextView textView1 = findViewById(R.id.textView3);
         timeService.getTime().observe(this,time->{
             textView1.setText(Long.toString(time));
         });**/
+
+
+
         locationService= LocationService.singleton(this);
+        orientationService=OrientationService.singleton(this);
         TextView textViewO=(TextView) findViewById(R.id.curr_Orientation);
         TextView textView=(TextView) findViewById(R.id.curr_location);
 
@@ -60,12 +66,12 @@ public class MainActivity extends AppCompatActivity {
             textView.setText(setCurrLoc);
         });
        orientationService.getOrientation().observe(this,Ori->{
-            String setCurrOri =String.format("CurrentOrientation: %.2f",Ori);
+            String setCurrOri =String.format("Current Orientation: %.2f",Ori);
             textViewO.setText(setCurrOri);
             currOri=Ori;
         });
 
-
+       /*
 
         //parent
 
@@ -83,13 +89,13 @@ public class MainActivity extends AppCompatActivity {
             parentsLocation.observe(this, pairP -> {
                 curr.observe(this, pairC -> {
                     float PAngle = DegreeDiff.calculateAngle(pairC,pairP);
-                    PAngle=PAngle-(float)Math.toDegrees(currOri);;
+                    PAngle=PAngle-(float)Math.toDegrees(currOri);
                     ParentTag.setText(preferences.getString("Parent_Label", "Parent"));
 
                     ConstraintLayout ParentLayout = (ConstraintLayout) findViewById(R.id.constraintLayout2);
                     ConstraintSet ParentLayoutSet = new ConstraintSet();
                     ParentLayoutSet.clone(ParentLayout);
-                    ParentLayoutSet.constrainCircle(R.id.TagP, R.id.circle, 475, PAngle);
+                    ParentLayoutSet.constrainCircle(R.id.TagP, R.id.circle, 475, PAngle); //important here
                     ParentLayoutSet.applyTo(ParentLayout);
                     ParentArrow.setRotation(PAngle);
                     ParentArrow.setVisibility(View.VISIBLE);
@@ -157,7 +163,11 @@ public class MainActivity extends AppCompatActivity {
 
             });
         }
+    */
 
+        //Stuff for zoom
+
+        ZoomDisplay.displayZoom(this);
 
     }
 
@@ -169,6 +179,50 @@ public class MainActivity extends AppCompatActivity {
     public void onLaunchChangeLabels(View view) {
         Intent intent = new Intent(this, ChangeLabelsActivity.class);
         startActivity(intent);
+    }
+
+    public void onZoomInButtonClicked(View view) {
+
+        SharedPreferences preferences = getSharedPreferences("pref",MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+
+        int zoomFactor = preferences.getInt("zoomFactor", 0);
+
+        //if zoom factor already at max (3), make it stay 3, else increment.
+
+        if (zoomFactor == 3) {
+            editor.putInt("zoomFactor", 3);
+            editor.apply();
+        }
+        else {
+            editor.putInt("zoomFactor", zoomFactor + 1);
+            editor.apply();
+        }
+
+        ZoomDisplay.displayZoom(this);
+
+    }
+
+    public void onZoomOutButtonClicked(View view) {
+
+        SharedPreferences preferences = getSharedPreferences("pref",MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+
+        int zoomFactor = preferences.getInt("zoomFactor", 0);
+
+        //if zoom factor already at min (0), make it stay 0, else decrement.
+
+        if (zoomFactor == 0) {
+            editor.putInt("zoomFactor", 0);
+            editor.apply();
+        }
+        else {
+            editor.putInt("zoomFactor", zoomFactor - 1);
+            editor.apply();
+        }
+
+        ZoomDisplay.displayZoom(this);
+
     }
 
    /* @Override
