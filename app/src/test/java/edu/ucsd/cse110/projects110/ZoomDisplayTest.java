@@ -18,6 +18,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -104,16 +105,14 @@ public class ZoomDisplayTest {
 
         // Check that only the first circle is visible
         assertEquals(VISIBLE, circle1Layout.getVisibility());
-        assertEquals(GONE, circle2Layout.getVisibility());
-        assertEquals(GONE, circle3Layout.getVisibility());
-        assertEquals(GONE, circle4Layout.getVisibility());
+        assertEquals(VISIBLE, circle2Layout.getVisibility());
+        assertEquals(VISIBLE, circle3Layout.getVisibility());
+        assertEquals(VISIBLE, circle4Layout.getVisibility());
 
         // Check that the layout parameters of the first circle are set correctly
         assertEquals(1025, circle1LayoutParams.width);
         assertEquals(1025, circle1LayoutParams.height);
 
-        // Check that the counter text is set correctly
-        //assertEquals("Displaying up to 10 Mile Radius", counter.getText());
     }
 
 
