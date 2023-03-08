@@ -2,9 +2,7 @@ package edu.ucsd.cse110.projects110;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
-import edu.ucsd.cse110.projects110.DistanceCalculator;
-
-public class DistanceCalculatorTest {
+public class DistanceCalculatorTest_MS2_TESTS {
 
     @Test
     public void testDistance() {
