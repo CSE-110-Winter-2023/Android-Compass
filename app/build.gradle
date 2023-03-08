@@ -4,12 +4,12 @@ plugins {
 
 android {
     namespace 'edu.ucsd.cse110.projects110'
-    compileSdk 32
+    compileSdk 33
 
     defaultConfig {
         applicationId "edu.ucsd.cse110.projects110"
         minSdk 28
-        targetSdk 32
+        targetSdk 33
         versionCode 1
         versionName "1.0"
 
@@ -29,14 +29,24 @@ android {
 }
 
 dependencies {
-    implementation 'androidx.appcompat:appcompat:1.4.2'
-    implementation 'com.google.android.material:material:1.7.0'
+    def gson_version = "2.10.1"
+    implementation "com.google.code.gson:gson:$gson_version"
+
+    def room_version = "2.5.0"
+    implementation "androidx.room:room-runtime:$room_version"
+    annotationProcessor "androidx.room:room-compiler:$room_version"
+
+    def okhttp_version = "4.10.0"
+    implementation "com.squareup.okhttp3:okhttp:$okhttp_version"
+
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'com.google.android.material:material:1.8.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+
+    // Dependencies for tests.
     testImplementation 'junit:junit:4.13.2'
-    testImplementation 'org.robolectric:robolectric:4.9'
-    testImplementation 'androidx.test:core:1.5.0'
-    testImplementation 'androidx.test.ext:junit:1.1.5'
+
+    // Dependencies for androidTests.
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
-    androidTestImplementation 'androidx.test:rules:1.5.0'
 }
