@@ -4,7 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.view.View;
 import android.widget.TextView;
-import static android.view.View.GONE;
+
 import static android.view.View.VISIBLE;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -22,7 +22,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
-public class ZoomDisplayTest {
+public class US9AND10MS2bddtest {
 
     @Mock
     private Activity activity;
