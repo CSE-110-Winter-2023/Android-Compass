@@ -1,10 +1,8 @@
 package edu.ucsd.cse110.projects110;
 
-//This is for User Story 2 System Test
+
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
-import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
-import static androidx.test.espresso.action.ViewActions.replaceText;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
@@ -29,7 +27,7 @@ import org.junit.runner.RunWith;
 
 @LargeTest
 @RunWith(AndroidJUnit4.class)
-public class LabelWithOutSavingTest {
+public class MS2_US10_BDDtest {
 
     @Rule
     public ActivityScenarioRule<MainActivity> mActivityScenarioRule =
@@ -38,95 +36,56 @@ public class LabelWithOutSavingTest {
     public GrantPermissionRule mGrantPermissionRule =
             GrantPermissionRule.grant(
                     "android.permission.ACCESS_FINE_LOCATION");
+
     @Test
-    public void labelWithOutSavingTest() {
+    public void mS2_US10_BDDtest() {
         ViewInteraction materialButton = onView(
-                allOf(withId(R.id.ChangeLabelsButton), withText("Change Labels"),
+                allOf(withId(R.id.ZoomInButton), withText("+"),
                         childAtPosition(
                                 childAtPosition(
                                         withId(android.R.id.content),
                                         0),
-                                0),
+                                8),
                         isDisplayed()));
         materialButton.perform(click());
 
-        ViewInteraction appCompatEditText = onView(
-                allOf(withId(R.id.ChangeParentID),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(android.R.id.content),
-                                        0),
-                                0),
-                        isDisplayed()));
-        appCompatEditText.perform(replaceText("mOMOMOM"), closeSoftKeyboard());
-
-        ViewInteraction appCompatEditText2 = onView(
-                allOf(withId(R.id.ChangeFriendID),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(android.R.id.content),
-                                        0),
-                                1),
-                        isDisplayed()));
-        appCompatEditText2.perform(replaceText("SHWOOJO"), closeSoftKeyboard());
-
-        ViewInteraction appCompatEditText3 = onView(
-                allOf(withId(R.id.ChangeAddressID),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(android.R.id.content),
-                                        0),
-                                2),
-                        isDisplayed()));
-        appCompatEditText3.perform(replaceText("HELLO"), closeSoftKeyboard());
-
         ViewInteraction materialButton2 = onView(
-                allOf(withId(R.id.exit), withText("Exit to Compass"),
+                allOf(withId(R.id.ZoomOutButton), withText("-"),
                         childAtPosition(
                                 childAtPosition(
                                         withId(android.R.id.content),
                                         0),
-                                3),
+                                9),
                         isDisplayed()));
         materialButton2.perform(click());
 
         ViewInteraction materialButton3 = onView(
-                allOf(withId(R.id.ChangeLabelsButton), withText("Change Labels"),
+                allOf(withId(R.id.ZoomOutButton), withText("-"),
                         childAtPosition(
                                 childAtPosition(
                                         withId(android.R.id.content),
                                         0),
-                                0),
+                                9),
                         isDisplayed()));
         materialButton3.perform(click());
 
-        ViewInteraction appCompatEditText4 = onView(
-                allOf(withId(R.id.ChangeParentID),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(android.R.id.content),
-                                        0),
-                                0),
-                        isDisplayed()));
-        appCompatEditText4.perform(replaceText(""), closeSoftKeyboard());
-
         ViewInteraction materialButton4 = onView(
-                allOf(withId(R.id.SaveLa), withText("Save Labels"),
+                allOf(withId(R.id.ZoomOutButton), withText("-"),
                         childAtPosition(
                                 childAtPosition(
                                         withId(android.R.id.content),
                                         0),
-                                4),
+                                9),
                         isDisplayed()));
         materialButton4.perform(click());
 
         ViewInteraction materialButton5 = onView(
-                allOf(withId(R.id.exit), withText("Exit to Compass"),
+                allOf(withId(R.id.ZoomOutButton), withText("-"),
                         childAtPosition(
                                 childAtPosition(
                                         withId(android.R.id.content),
                                         0),
-                                3),
+                                9),
                         isDisplayed()));
         materialButton5.perform(click());
     }
