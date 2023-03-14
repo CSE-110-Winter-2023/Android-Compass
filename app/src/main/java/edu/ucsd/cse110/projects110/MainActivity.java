@@ -172,7 +172,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onLaunchLocations(View view) {
-        Intent intent = new Intent(this,LocationActivity.class);
+        Intent intent = new Intent(this,UserListActivity.class);
         startActivity(intent);
     }
 

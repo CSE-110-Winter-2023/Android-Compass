@@ -1,6 +1,7 @@
 package edu.ucsd.cse110.projects110;
 
 import androidx.annotation.NonNull;
+import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
@@ -8,7 +9,7 @@ import com.google.gson.Gson;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.UUID;
-
+@Entity(tableName = "users")
 public class User {
     /** The title of the note. Used as the primary key for shared notes (even on the cloud). */
     @PrimaryKey
@@ -31,7 +32,10 @@ public class User {
     @SerializedName(value = "version")
     public long version = 0;
 
-    /** General constructor for a note. */
+    public User() {
+        // Empty constructor required by Room.
+    }
+    /** General constructor for a friend. */
     public User(@NonNull String id, @NonNull String Name, double lat
             ,double Long) {
         this.UID=id;
@@ -40,15 +44,7 @@ public class User {
         this.Lat=lat;
         this.version = 0;
     }
-    /** constructor for the device owner user creation.*/
-    public User(@NonNull String Name, double lat
-            ,double Long) {
-        this.UID=UUID.randomUUID().toString();
-        this.name = Name;
-        this.Long=Long;
-        this.Lat=lat;
-        this.version = 0;
-    }
+
 
     public static User fromJSON(String json) {
         return new Gson().fromJson(json, User.class);
