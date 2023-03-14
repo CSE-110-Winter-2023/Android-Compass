@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.Collections;
 import java.util.List;
 public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
-    private List<User> users = Collections.emptyList();
+    public List<User> users = Collections.emptyList();
     private Consumer<User> onUserClicked;
     private Consumer<User> onUserDeleteClicked;
 
