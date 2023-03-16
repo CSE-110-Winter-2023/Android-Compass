@@ -52,8 +52,6 @@ public class MainActivity extends AppCompatActivity {
         orientationService=OrientationService.singleton(this);
         TextView textViewO=(TextView) findViewById(R.id.curr_Orientation);
         TextView textView=(TextView) findViewById(R.id.curr_location);
-        TextView UserT=(TextView) findViewById(R.id.UserExample);
-
 
         //viewModel is used for accessing database
         var viewModel = new ViewModelProvider(this).get(UserListViewModel.class);
@@ -67,8 +65,6 @@ public class MainActivity extends AppCompatActivity {
             editor.putString("OurLong", loc.second.toString());
             editor.apply();
 
-            //TextView userExample = findViewById(R.id.UserExample);
-
             textView.setText(setCurrLoc);
             users.observe(this, userList -> {
                 for(User user:userList){
@@ -76,9 +72,6 @@ public class MainActivity extends AppCompatActivity {
                     float f=DegreeDiff.calculateAngle(loc.first,loc.second,user.latitude,user.longitude);
 
                    UserDisplay.addUserLoaction(this, user.label, user.public_code.hashCode(), user.latitude, user.longitude);
-
-
-                    //userExample.setText(Integer.valueOf(user.public_code.hashCode()));
 
                     Log.i("distance",Double.toString(d));
                     Log.i("Degree",Float.toString(f));

@@ -101,17 +101,12 @@ public class UserDisplay {
         //adding of text onto screen
 
         if (CircleLayout.getViewById(UID) == null) {
-            TextView userExample = activity.findViewById(R.id.UserExample);
-            userExample.setText("null");
+            TextView displayUser = new TextView(activity);
+            displayUser.setText(UserName);
+            displayUser.setTextSize(15);
+            displayUser.setId(UID);
+            CircleLayout.addView(displayUser);
         }
-
-
-
-        TextView displayUser = new TextView(activity);
-        displayUser.setText(UserName);
-        displayUser.setTextSize(15);
-        displayUser.setId(UID);
-        CircleLayout.addView(displayUser);
 
         resizeUserLocation(activity, whichCircle, CircleLayout, circle, UID, UserLat, UserLong);
     }
