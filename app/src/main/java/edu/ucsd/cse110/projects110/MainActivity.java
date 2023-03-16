@@ -6,6 +6,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.core.app.ActivityCompat;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -16,6 +17,7 @@ import android.content.pm.PackageManager;
 import android.hardware.Sensor;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.content.Intent;
 import android.text.Layout;
@@ -28,12 +30,17 @@ import android.widget.TextView;
 import org.w3c.dom.Text;
 
 import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends AppCompatActivity {
     private LocationService locationService;
     private OrientationService orientationService;
     private float currOri=0f;
     private TimeService timeService;
+    private ScheduledFuture<?> poller;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,26 +88,83 @@ public class MainActivity extends AppCompatActivity {
         var viewModel = new ViewModelProvider(this).get(UserListViewModel.class);
         //everything in database here
         LiveData<List<User>> users= viewModel.getUsers();
-        //use for loop later to get all locations and their data for later UI update
-        locationService.getLocation().observe(this,loc->{
-            String setCurrLoc = String.format("Current Location: %.2f, %.2f",loc.first, loc.second);
 
-            editor.putString("OurLat", loc.first.toString());
-            editor.putString("OurLong", loc.second.toString());
-            editor.apply();
+        /*
+            Detecting Online / Offline
 
-            textView.setText(setCurrLoc);
+         */
+
+        MediatorLiveData<LocationManager> OnlineOrOffline = new MediatorLiveData<>();
+
+        //cancel any threads
+
+        if (this.poller != null && !this.poller.isCancelled()) {
+            poller.cancel(true);
+        }
+
+        //checks GPS status every second
+
+        ScheduledExecutorService backgroundThreadExecutor = Executors.newSingleThreadScheduledExecutor();
+        this.poller = backgroundThreadExecutor.scheduleAtFixedRate(() -> {
+
+                    OnlineOrOffline.postValue((LocationManager)getSystemService( Context.LOCATION_SERVICE ));
+
+                },
+                1,1, TimeUnit.SECONDS);
+
+        //If we are online, set text to online; if we are offline, set text to offline
+
+        TextView statusView = findViewById(R.id.OnlineOfflineStatus);
+
+        OnlineOrOffline.observe(this, status-> {
+
+            if (!status.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+
+                statusView.setText("GPS STATUS: OFF");
+                statusView.setTextColor(0xFFFF0000);
+
+                double CurrUserLat = Double.parseDouble(preferences.getString("OurLat", "0"));
+                double CurrUserLong = Double.parseDouble(preferences.getString("OurLong", "0"));
+                String setCurrLoc = String.format("Last Known Location: %.2f, %.2f",CurrUserLat, CurrUserLong);
+
+                textView.setText(setCurrLoc);
+            }
+            else {
+                statusView.setText("GPS STATUS: ON");
+                statusView.setTextColor(0xFF5BFC4D);
+
+                locationService.getLocation().observe(this,loc->{
+
+                    editor.putString("OurLat", loc.first.toString());
+                    editor.putString("OurLong", loc.second.toString());
+                    editor.apply();
+
+                    double CurrUserLat = Double.parseDouble(preferences.getString("OurLat", "0"));
+                    double CurrUserLong = Double.parseDouble(preferences.getString("OurLong", "0"));
+                    String setCurrLoc = String.format("Current Location: %.2f, %.2f",CurrUserLat, CurrUserLong);
+
+                    textView.setText(setCurrLoc);
+                });
+            }
+
+            //use for loop later to get all locations and their data for later UI update
+
             users.observe(this, userList -> {
-                for(User user:userList){
-                    double d= DistanceCalculator.calculateDistance(loc.first,loc.second,user.latitude,user.longitude);
-                    float f=DegreeDiff.calculateAngle(loc.first,loc.second,user.latitude,user.longitude);
 
-                   UserDisplay.addUserLoaction(this, user.label, user.public_code.hashCode(), user.latitude, user.longitude);
+                double CurrUserLat = Double.parseDouble(preferences.getString("OurLat", "0"));
+                double CurrUserLong = Double.parseDouble(preferences.getString("OurLong", "0"));
+
+                for(User user:userList){
+                    double d= DistanceCalculator.calculateDistance(CurrUserLat,CurrUserLong,user.latitude,user.longitude);
+                    float f=DegreeDiff.calculateAngle(CurrUserLat,CurrUserLong,user.latitude,user.longitude);
+
+                    UserDisplay.addUserLoaction(this, user.label, user.public_code.hashCode(), user.latitude, user.longitude);
 
                     Log.i("distance",Double.toString(d));
                     Log.i("Degree",Float.toString(f));
                 }
             });
+
         });
 
         orientationService.getOrientation().observe(this,Ori->{
