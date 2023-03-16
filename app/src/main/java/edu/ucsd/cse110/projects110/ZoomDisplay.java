@@ -102,4 +102,82 @@ public class ZoomDisplay {
         Circle3Layout.setLayoutParams(Circle3LayoutParams);
         Circle4Layout.setLayoutParams(Circle4LayoutParams);
     }
+
+    //find radius given the zoom factor
+
+    public static int radius (int Circle, int Zoom) {
+
+        int radius = 0;
+
+        switch (Zoom) {
+
+            case 3:
+
+                switch (Circle) {
+                    case 1:
+                        radius = 480;
+                        break;
+                    default:
+
+                        //note: '9999999' is an absurdly large #,
+                        //representing that we don't want it displaying.
+
+                        radius = 999999;
+                }
+                break;
+
+            case 2:
+
+                switch (Circle) {
+                    case 1:
+                        radius = 395;
+                        break;
+                    case 2:
+                        radius = 500;
+                        break;
+                    default:
+                        radius = 9999999;
+                }
+                break;
+
+            case 1:
+
+                switch (Circle) {
+                    case 1:
+                        radius = 305;
+                        break;
+                    case 2:
+                        radius = 400;
+                        break;
+                    case 3:
+                        radius = 510;
+                        break;
+                    default:
+                        radius = 9999999;
+                }
+                break;
+
+            case 0:
+
+                switch (Circle) {
+                    case 1:
+                        radius = 210;
+                        break;
+                    case 2:
+                        radius = 315;
+                        break;
+                    case 3:
+                        radius = 420;
+                        break;
+                    case 4:
+                        radius = 525;
+                        break;
+                    default:
+                        radius = 9999999;
+                }
+                break;
+        }
+        return radius;
+    }
+
 }
