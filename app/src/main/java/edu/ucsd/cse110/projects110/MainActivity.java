@@ -41,6 +41,14 @@ public class MainActivity extends AppCompatActivity {
         /*
              Setup and making sure parameters for running app are correct
          */
+        SharedPreferences preferences = getSharedPreferences("pref",MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        boolean startScreenCompleted = preferences.getBoolean("StartScreenCompleted", false);
+
+        if (!startScreenCompleted) {
+            Intent intent = new Intent(this,OnStartActivity.class);
+            startActivity(intent);
+        }
 
         if(ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)!= PackageManager.PERMISSION_GRANTED &&
                 ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)!= PackageManager.PERMISSION_GRANTED){
@@ -50,19 +58,11 @@ public class MainActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        SharedPreferences preferences = getSharedPreferences("pref",MODE_PRIVATE);
-        SharedPreferences.Editor editor = preferences.edit();
 
         /*
             Startup screen- Run only once to get current user's name
          */
 
-        boolean startScreenCompleted = preferences.getBoolean("StartScreenCompleted", false);
-
-        if (!startScreenCompleted) {
-            Intent intent = new Intent(this,OnStartActivity.class);
-            startActivity(intent);
-        }
 
         TextView showUserName = (TextView) findViewById(R.id.CurrUserName);
         String userName = preferences.getString("CurrUserName", "");
