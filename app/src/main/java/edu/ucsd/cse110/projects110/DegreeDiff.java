@@ -6,11 +6,8 @@ import androidx.lifecycle.LiveData;
 import java.lang.Math;
 
 public class DegreeDiff {
-    public static float calculateAngle(Pair<Double,Double> loc1, Pair<Double,Double> loc2) {
-        double lat1 = loc1.first;
-        double lon1 = loc1.second;
-        double lat2 = loc2.first;
-        double lon2 = loc2.second;
+    public static float calculateAngle(double lat1, double lon1, double lat2, double lon2) {
+
 
         double dLon = (lon2 - lon1);
 

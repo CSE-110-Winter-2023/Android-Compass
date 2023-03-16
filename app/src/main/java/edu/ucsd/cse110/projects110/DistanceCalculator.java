@@ -3,22 +3,20 @@ import java.lang.Math;
 public class DistanceCalculator {
     public static final double EARTH_RADIUS = 6371.00; // mean radius of the Earth in kilometers
 
-    public static double distance(double lat1, double lon1, double lat2, double lon2) {
-        double lat1Rad = Math.toRadians(lat1);
-        double lat2Rad = Math.toRadians(lat2);
-        double lon1Rad = Math.toRadians(lon1);
-        double lon2Rad = Math.toRadians(lon2);
+    public static double calculateDistance(double lat1, double lon1, double lat2, double lon2) {
+        final double EARTH_RADIUS = 3958.8; // Earth's radius in miles
 
-        double a = Math.pow(Math.sin((lat2Rad - lat1Rad) / 2), 2) +
-                Math.cos(lat1Rad) * Math.cos(lat2Rad) *
-                        Math.pow(Math.sin((lon2Rad - lon1Rad) / 2), 2);
+        double lat1Radians = Math.toRadians(lat1);
+        double lon1Radians = Math.toRadians(lon1);
+        double lat2Radians = Math.toRadians(lat2);
+        double lon2Radians = Math.toRadians(lon2);
 
-        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-        double distance = EARTH_RADIUS * c;
+        double x = (lon2Radians - lon1Radians) * Math.cos((lat1Radians + lat2Radians) / 2);
+        double y = (lat2Radians - lat1Radians);
+        double distance = Math.sqrt(x * x + y * y) * EARTH_RADIUS;
 
-        return distance * 0.621371; // Convert from kilometers to miles
+        return distance;
     }
-
 
     public static final int circleDecider(double distance){
         if(distance<1.0){
@@ -33,3 +31,13 @@ public class DistanceCalculator {
         return 4;
     }
 }
+
+
+
+
+
+
+
+
+
+

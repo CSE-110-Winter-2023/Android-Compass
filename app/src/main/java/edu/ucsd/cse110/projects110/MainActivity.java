@@ -7,6 +7,7 @@ import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.core.app.ActivityCompat;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.Manifest;
 import android.content.Context;
@@ -18,26 +19,66 @@ import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.content.Intent;
 import android.text.Layout;
+import android.util.Log;
 import android.util.Pair;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     private LocationService locationService;
     private OrientationService orientationService;
     private float currOri=0f;
     private TimeService timeService;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
         if(ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)!= PackageManager.PERMISSION_GRANTED &&
                 ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)!= PackageManager.PERMISSION_GRANTED){
 
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION},200);
         }
+
         SharedPreferences preferences = getSharedPreferences("pref",MODE_PRIVATE);
+
+
+        locationService= LocationService.singleton(this);
+        orientationService=OrientationService.singleton(this);
+        TextView textViewO=(TextView) findViewById(R.id.curr_Orientation);
+        TextView textView=(TextView) findViewById(R.id.curr_location);
+        TextView UserT=(TextView) findViewById(R.id.UserExample);
+
+
+        //viewModel is used for accessing database
+        var viewModel = new ViewModelProvider(this).get(UserListViewModel.class);
+        //everything in database here
+        LiveData<List<User>> users= viewModel.getUsers();
+        //use for loop later to get all locations and their data for later UI update
+        locationService.getLocation().observe(this,loc->{
+            String setCurrLoc = String.format("Current Location: %.2f, %.2f",loc.first, loc.second);
+            textView.setText(setCurrLoc);
+            users.observe(this, userList -> {
+                for(User user:userList){
+                    double d= DistanceCalculator.calculateDistance(loc.first,loc.second,user.latitude,user.longitude);
+                    float f=DegreeDiff.calculateAngle(loc.first,loc.second,user.latitude,user.longitude);
+                    UserT.setText(Double.toString(d));
+                    Log.i("distance",Double.toString(d));
+                    Log.i("Degree",Float.toString(f));
+                }
+            });
+        });
+        orientationService.getOrientation().observe(this,Ori->{
+            String setCurrOri =String.format("Current Orientation: %.2f",Ori);
+            textViewO.setText(setCurrOri);
+            currOri=Ori;
+        });
+
 
         /*
 
@@ -48,6 +89,7 @@ public class MainActivity extends AppCompatActivity {
         FriendArrow.setVisibility(View.INVISIBLE);
         AddrArrow.setVisibility(View.INVISIBLE);
 
+         */
         /*timeService = new TimeService();
         TextView textView1 = findViewById(R.id.textView3);
         timeService.getTime().observe(this,time->{
@@ -55,21 +97,6 @@ public class MainActivity extends AppCompatActivity {
         });**/
 
 
-
-        locationService= LocationService.singleton(this);
-        orientationService=OrientationService.singleton(this);
-        TextView textViewO=(TextView) findViewById(R.id.curr_Orientation);
-        TextView textView=(TextView) findViewById(R.id.curr_location);
-
-        locationService.getLocation().observe(this,loc->{
-            String setCurrLoc = String.format("Current Location: %.2f, %.2f",loc.first, loc.second);
-            textView.setText(setCurrLoc);
-        });
-       orientationService.getOrientation().observe(this,Ori->{
-            String setCurrOri =String.format("Current Orientation: %.2f",Ori);
-            textViewO.setText(setCurrOri);
-            currOri=Ori;
-        });
 
        /*
 
@@ -172,7 +199,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onLaunchLocations(View view) {
-        Intent intent = new Intent(this,LocationActivity.class);
+        Intent intent = new Intent(this,UserListActivity.class);
         startActivity(intent);
     }
 
