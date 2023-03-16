@@ -57,6 +57,7 @@ public class UserRepository {
 
     public void upsertLocal(User user) {
         // updated local friends when online data comes in
+
         dao.upsert(user);
     }
 
