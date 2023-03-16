@@ -17,29 +17,24 @@ import okhttp3.Response;
 
 public class UserAPI {
 
-        // TODO: Implement the API using OkHttp!
-        // TODO: - getUser (maybe getUserAsync)
-        // TODO: - putUser (don't need putUserAsync, probably)
-        // TODO: Read the docs: https://square.github.io/okhttp/
-        // TODO: Read the docs: https://sharednotes.goto.ucsd.edu/docs
 
         public static final MediaType JSON = MediaType.get("application/json; charset=utf-8");
 
         private volatile static UserAPI instance = null;
 
         private OkHttpClient client;
-
+        //sets up client
         public UserAPI() {
             this.client = new OkHttpClient();
         }
-
+        //creates API object
         public static UserAPI provide() {
             if (instance == null) {
                 instance = new UserAPI();
             }
             return instance;
         }
-
+        //gets user from remote server
         @WorkerThread
         public User getUser(String publicCode) {
             String encodedCode = publicCode.replace(" ", "%20");
@@ -59,7 +54,7 @@ public class UserAPI {
                 return null;
             }
         }
-
+        //use this to put our location to server
         public void putUser(User user) {
             var executor = Executors.newSingleThreadExecutor();
             var future = executor.submit(() -> {
@@ -79,7 +74,7 @@ public class UserAPI {
                 }
             });
         }
-
+        //unused
         @AnyThread
         public Future<User> getUserAsync(String publicCode) {
             var executor = Executors.newSingleThreadExecutor();
