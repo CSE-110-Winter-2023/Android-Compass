@@ -48,8 +48,10 @@ public class UserListViewModel extends AndroidViewModel {
 
             if (remoteUser != null) {
                 if (localUser == null) {
-                    repo.upsertLocal(remoteUser);
-                    userLiveData.postValue(remoteUser);
+                    if (repo.existsLocal((remoteUser.public_code))){
+                        repo.upsertLocal(remoteUser);
+                        userLiveData.postValue(remoteUser);
+                    }
                 }else {
                     repo.upsertLocal(remoteUser);
                     userLiveData.postValue(localUser);

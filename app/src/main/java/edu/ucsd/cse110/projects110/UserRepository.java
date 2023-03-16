@@ -1,5 +1,6 @@
 package edu.ucsd.cse110.projects110;
 
+import android.app.Activity;
 import android.os.FileUriExposedException;
 import android.util.Log;
 
