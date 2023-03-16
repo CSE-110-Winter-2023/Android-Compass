@@ -92,6 +92,7 @@ public class MainActivity extends AppCompatActivity {
             textView.setText(setCurrLoc);
             users.observe(this, userList -> {
                 for(User user:userList){
+
                     double d= DistanceCalculator.calculateDistance(loc.first,loc.second,user.latitude,user.longitude);
                     float f=DegreeDiff.calculateAngle(loc.first,loc.second,user.latitude,user.longitude);
 

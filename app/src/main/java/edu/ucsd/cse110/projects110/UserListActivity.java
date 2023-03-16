@@ -61,7 +61,6 @@ public class UserListActivity extends AppCompatActivity {
             // Otherwise, create a new note, persist it...
             var title = input.getText().toString();
             var user = viewModel.getOrCreateUser(title);
-
              //...wait for the database to finish persisting it...
 //            user.observe(this, userEntity -> {
 //                // ...stop observing.
