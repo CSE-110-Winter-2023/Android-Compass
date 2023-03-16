@@ -29,6 +29,7 @@ import android.widget.TextView;
 
 import org.w3c.dom.Text;
 
+import java.time.OffsetTime;
 import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -115,6 +116,7 @@ public class MainActivity extends AppCompatActivity {
         //If we are online, set text to online; if we are offline, set text to offline
 
         TextView statusView = findViewById(R.id.OnlineOfflineStatus);
+        TextView OfflineTime = findViewById(R.id.OfflineTime);
 
         OnlineOrOffline.observe(this, status-> {
 
@@ -122,6 +124,15 @@ public class MainActivity extends AppCompatActivity {
 
                 statusView.setText("GPS STATUS: OFF");
                 statusView.setTextColor(0xFFFF0000);
+
+                //set up offline time in seconds with background thread executor above
+                int SecondsOffline = preferences.getInt("OfflineTime", 0);
+                editor.putInt("OfflineTime", SecondsOffline + 1);
+                editor.apply();
+                SecondsOffline = preferences.getInt("OfflineTime", 0);
+
+                OfflineTime.setText("Offline for " + SecondsOffline + " s");
+                OfflineTime.setVisibility(View.VISIBLE);
 
                 double CurrUserLat = Double.parseDouble(preferences.getString("OurLat", "0"));
                 double CurrUserLong = Double.parseDouble(preferences.getString("OurLong", "0"));
@@ -132,6 +143,13 @@ public class MainActivity extends AppCompatActivity {
             else {
                 statusView.setText("GPS STATUS: ON");
                 statusView.setTextColor(0xFF5BFC4D);
+
+                //resetting time to 0 and hiding the view
+                editor.putInt("OfflineTime", 0);
+                editor.apply();
+                int SecondsOffline = preferences.getInt("OfflineTime", 0);
+                OfflineTime.setText("Offline for " + SecondsOffline + " s");
+                OfflineTime.setVisibility(View.INVISIBLE);
 
                 locationService.getLocation().observe(this,loc->{
 
