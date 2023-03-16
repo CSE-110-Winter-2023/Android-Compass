@@ -22,7 +22,7 @@ public class TimeService {
         ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
         this.clockFuture = executor.scheduleAtFixedRate(() -> {
             this.timeValue.postValue(System.currentTimeMillis());
-        }, 0, 1000, TimeUnit.MILLISECONDS);
+        }, 1, 1, TimeUnit.SECONDS);
     }
 
     public MutableLiveData<Long> getTime() {
