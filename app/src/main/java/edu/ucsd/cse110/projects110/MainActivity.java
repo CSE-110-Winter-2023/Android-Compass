@@ -84,7 +84,6 @@ public class MainActivity extends AppCompatActivity {
         //use for loop later to get all locations and their data for later UI update
         locationService.getLocation().observe(this,loc->{
             String setCurrLoc = String.format("Current Location: %.2f, %.2f",loc.first, loc.second);
-
             editor.putString("OurLat", loc.first.toString());
             editor.putString("OurLong", loc.second.toString());
             editor.apply();
@@ -92,11 +91,10 @@ public class MainActivity extends AppCompatActivity {
             textView.setText(setCurrLoc);
             users.observe(this, userList -> {
                 for(User user:userList){
-
+                    viewModel.getOrCreateUser(user.public_code);
                     double d= DistanceCalculator.calculateDistance(loc.first,loc.second,user.latitude,user.longitude);
                     float f=DegreeDiff.calculateAngle(loc.first,loc.second,user.latitude,user.longitude);
-
-                   UserDisplay.addUserLoaction(this, user.label, user.public_code.hashCode(), user.latitude, user.longitude);
+                    UserDisplay.addUserLoaction(this, user.label, user.public_code.hashCode(), user.latitude, user.longitude);
 
                     Log.i("distance",Double.toString(d));
                     Log.i("Degree",Float.toString(f));
