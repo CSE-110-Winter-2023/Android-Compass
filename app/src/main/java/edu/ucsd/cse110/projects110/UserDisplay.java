@@ -90,7 +90,7 @@ public class UserDisplay {
         User's Lat and Long will be used to find which circle / how far the User is from us (the CurrUser)
      */
 
-    public static void addUserLoaction(Activity activity, String UserName, int UID, double UserLat, double UserLong) {
+    public static void addUserLocation(Activity activity, String UserName, int UID, double UserLat, double UserLong) {
 
         //making sure user lat and long in bounds
         boolean LatBool = ValidLocations.isValidLat(Double.toString(UserLat));
@@ -101,36 +101,42 @@ public class UserDisplay {
             return;
         }
 
-        SharedPreferences preferences = activity.getSharedPreferences("pref", Context.MODE_PRIVATE);
-
-        //find our angular distance from them
-        double OurLat = Double.parseDouble(preferences.getString("OurLat", "0"));
-        double OurLong = Double.parseDouble(preferences.getString("OurLong", "0"));
-
-        //used to find what radius
-        int zoomFactor = preferences.getInt("zoomFactor", 0);
-
-        //ori is used to find what angle
-        double ourOri = Double.parseDouble(preferences.getString("OurOri", "0"));
-
         //finding which circle the User belongs to
         ConstraintLayout CircleLayout = WhichLayout(activity, UserLat, UserLong);
         int whichCircle = whichCircle(activity, UserLat, UserLong);
         int circle = Circle(activity, UserLat, UserLong);
 
-        //adding of text onto screen, if it already doesn't exist (prevents duplicates)
+        TextView existingUser = null;
 
-        if (CircleLayout.getViewById(UID) == null) {
+        ConstraintLayout[] allLayouts = new ConstraintLayout[4];
+        allLayouts[0] = (ConstraintLayout) activity.findViewById(R.id.Circle1Constraint);
+        allLayouts[1] = (ConstraintLayout) activity.findViewById(R.id.Circle2Constraint);
+        allLayouts[2] = (ConstraintLayout) activity.findViewById(R.id.Circle3Constraint);
+        allLayouts[3] = (ConstraintLayout) activity.findViewById(R.id.Circle4Constraint);
+
+        for (ConstraintLayout layout : allLayouts) {
+            if (layout.getViewById(UID) != null) {
+                existingUser = (TextView) layout.getViewById(UID);
+                layout.removeView(existingUser); // Remove the view from its current parent
+                break;
+            }
+        }
+
+        if (existingUser == null) {
             TextView displayUser = new TextView(activity);
             displayUser.setText(UserName);
             displayUser.setTextSize(15);
             displayUser.setId(UID);
             CircleLayout.addView(displayUser);
+        } else {
+            CircleLayout.removeView(existingUser);
+            CircleLayout.addView(existingUser);
         }
 
         //Displaying the User in the correct ring and distance from the user, which will change based on zoom
         resizeUserLocation(activity, whichCircle, CircleLayout, circle, UID, UserLat, UserLong);
     }
+
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -141,28 +147,8 @@ public class UserDisplay {
         Solution: We 'dynamically' resize where Users are displayed based on the zoom factor.
      */
 
-    public static void resizeUserLocation (Activity activity, int whichCircle, ConstraintLayout whichLayout,
-                                           int Circle, int UID, double UserLat, double UserLong) {
-
-        /*
-            On re-displaying a user, we must check if their distance 'jumped' a circle.
-            If it did, we delete it from the old circle.
-         */
-
-        ConstraintLayout[] allLayouts = new ConstraintLayout[4];
-        allLayouts[0] = (ConstraintLayout) activity.findViewById(R.id.Circle1Constraint);
-        allLayouts[1] = (ConstraintLayout) activity.findViewById(R.id.Circle2Constraint);
-        allLayouts[2] = (ConstraintLayout) activity.findViewById(R.id.Circle3Constraint);
-        allLayouts[3] = (ConstraintLayout) activity.findViewById(R.id.Circle4Constraint);
-
-
-        for (ConstraintLayout layout : allLayouts) {
-
-            if (layout != whichLayout) {
-                deleteUserLocation(activity, layout, UID);
-            }
-        }
-
+    public static void resizeUserLocation(Activity activity, int whichCircle, ConstraintLayout whichLayout,
+                                          int Circle, int UID, double UserLat, double UserLong) {
 
         SharedPreferences preferences = activity.getSharedPreferences("pref", Context.MODE_PRIVATE);
         int zoomFactor = preferences.getInt("zoomFactor", 0);
@@ -171,7 +157,7 @@ public class UserDisplay {
 
         float Angle = DegreeDiff.calculateAngle(OurLat, OurLong, UserLat, UserLong);
         double ourOri = Double.parseDouble(preferences.getString("OurOri", "0"));
-        Angle = Angle-(float)Math.toDegrees(ourOri);
+        Angle = Angle - (float) Math.toDegrees(ourOri);
 
         int radius = ZoomDisplay.radius(whichCircle, zoomFactor);
 
@@ -179,8 +165,8 @@ public class UserDisplay {
         LayoutSet.clone(whichLayout);
         LayoutSet.constrainCircle(UID, Circle, radius, Angle);
         LayoutSet.applyTo(whichLayout);
-
     }
+
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 

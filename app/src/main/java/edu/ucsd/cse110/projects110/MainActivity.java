@@ -94,7 +94,7 @@ public class MainActivity extends AppCompatActivity {
                     viewModel.getOrCreateUser(user.public_code);
                     double d= DistanceCalculator.calculateDistance(loc.first,loc.second,user.latitude,user.longitude);
                     float f=DegreeDiff.calculateAngle(loc.first,loc.second,user.latitude,user.longitude);
-                    UserDisplay.addUserLoaction(this, user.label, user.public_code.hashCode(), user.latitude, user.longitude);
+                    UserDisplay.addUserLocation(this, user.label, user.public_code.hashCode(), user.latitude, user.longitude);
 
                     Log.i("distance",Double.toString(d));
                     Log.i("Degree",Float.toString(f));
