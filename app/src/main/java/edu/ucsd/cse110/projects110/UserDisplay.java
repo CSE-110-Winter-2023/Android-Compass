@@ -9,6 +9,8 @@ import android.widget.TextView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 
+import java.util.ArrayList;
+
 public class UserDisplay {
 
     /*
@@ -34,7 +36,7 @@ public class UserDisplay {
 
     public static ConstraintLayout WhichLayout (Activity activity, double UserLat, double UserLong) {
 
-       int whichCircle = whichCircle(activity, UserLat, UserLong);
+        int whichCircle = whichCircle(activity, UserLat, UserLong);
 
         if (whichCircle == 1) {
             return (ConstraintLayout) activity.findViewById(R.id.Circle1Constraint);
@@ -141,6 +143,26 @@ public class UserDisplay {
 
     public static void resizeUserLocation (Activity activity, int whichCircle, ConstraintLayout whichLayout,
                                            int Circle, int UID, double UserLat, double UserLong) {
+
+        /*
+            On re-displaying a user, we must check if their distance 'jumped' a circle.
+            If it did, we delete it from the old circle.
+         */
+
+        ConstraintLayout[] allLayouts = new ConstraintLayout[4];
+        allLayouts[0] = (ConstraintLayout) activity.findViewById(R.id.Circle1Constraint);
+        allLayouts[1] = (ConstraintLayout) activity.findViewById(R.id.Circle2Constraint);
+        allLayouts[2] = (ConstraintLayout) activity.findViewById(R.id.Circle3Constraint);
+        allLayouts[3] = (ConstraintLayout) activity.findViewById(R.id.Circle4Constraint);
+
+
+        for (ConstraintLayout layout : allLayouts) {
+
+            if (layout != whichLayout) {
+                deleteUserLocation(activity, layout, UID);
+            }
+        }
+
 
         SharedPreferences preferences = activity.getSharedPreferences("pref", Context.MODE_PRIVATE);
         int zoomFactor = preferences.getInt("zoomFactor", 0);
