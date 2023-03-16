@@ -13,9 +13,9 @@ public class DistanceCalculatorTest_MS2_TESTS {
         double expectedDistance1 = 6.8;
         double lat3 =41.8781;
         double lon3 =-83.63;
-        double expectedDistance2 = 1930;
-        double actualDistance = DistanceCalculator.distance(lat1, lon1, lat2, lon2);
-        double actualDistanceCS = DistanceCalculator.distance(lat1, lon1, lat3, lon3);
+        double expectedDistance2 = 1947;
+        double actualDistance = DistanceCalculator.calculateDistance(lat1, lon1, lat2, lon2);
+        double actualDistanceCS = DistanceCalculator.calculateDistance(lat1, lon1, lat3, lon3);
         assertEquals(expectedDistance2, actualDistanceCS, 5.0);
         assertEquals(expectedDistance1, actualDistance, 0.1); // Allow for a 0.1 mile error
     }
