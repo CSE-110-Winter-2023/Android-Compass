@@ -25,6 +25,8 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import org.w3c.dom.Text;
+
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -35,9 +37,10 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
 
+        /*
+             Setup and making sure parameters for running app are correct
+         */
 
         if(ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)!= PackageManager.PERMISSION_GRANTED &&
                 ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)!= PackageManager.PERMISSION_GRANTED){
@@ -45,8 +48,29 @@ public class MainActivity extends AppCompatActivity {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION},200);
         }
 
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
         SharedPreferences preferences = getSharedPreferences("pref",MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
+
+        /*
+            Startup screen- Run only once to get current user's name
+         */
+
+        boolean startScreenCompleted = preferences.getBoolean("StartScreenCompleted", false);
+
+        if (!startScreenCompleted) {
+            Intent intent = new Intent(this,OnStartActivity.class);
+            startActivity(intent);
+        }
+
+        TextView showUserName = (TextView) findViewById(R.id.CurrUserName);
+        String userName = preferences.getString("CurrUserName", "");
+        showUserName.setText("Your online name is '" + userName + "'- share this with your friends!");
+
+        /*
+            Getting Location and Orientation of current user
+         */
 
         locationService= LocationService.singleton(this);
         orientationService=OrientationService.singleton(this);
@@ -79,8 +103,6 @@ public class MainActivity extends AppCompatActivity {
             });
         });
 
-
-
         orientationService.getOrientation().observe(this,Ori->{
             String setCurrOri =String.format("Current Orientation: %.2f",Ori);
             textViewO.setText(setCurrOri);
@@ -89,28 +111,57 @@ public class MainActivity extends AppCompatActivity {
             editor.apply();
         });
 
-        //Stuff for zoom
+        /*
+            Setting up the display
+         */
 
         ZoomDisplay.displayZoom(this);
 
+        /* NEW - Wednesday 11:58 PM
+
+            Creating a User Object for current user
+
+            Please upload this to online database, but not local database, so we don't have duplicates!
+
+            My idea- if we want to change our name, we can add it into local database when we go to 'users activity,'
+            then remove it on exit so it does not show
+
+         */
+
+
+
     }
+
+    /*
+        Setting up activity to go to interactive database of friends when clicked.
+     */
 
     public void onLaunchLocations(View view) {
         Intent intent = new Intent(this,UserListActivity.class);
         startActivity(intent);
     }
 
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    /*
+        Setting up change labels ---------- OUTDATED
+     */
+
     public void onLaunchChangeLabels(View view) {
         Intent intent = new Intent(this, ChangeLabelsActivity.class);
         startActivity(intent);
     }
+
+    /*
+        On clicking Zoom In Button, increment zoom and change display
+     */
 
     public void onZoomInButtonClicked(View view) {
 
         SharedPreferences preferences = getSharedPreferences("pref",MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
 
-        int zoomFactor = preferences.getInt("zoomFactor", 0);
+        int zoomFactor = preferences.getInt("zoomFactor", 2);
 
         //if zoom factor already at max (3), make it stay 3, else increment.
 
@@ -127,12 +178,18 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    /*
+        On clicking Zoom Out button, decrement zoom and change display
+     */
+
     public void onZoomOutButtonClicked(View view) {
 
         SharedPreferences preferences = getSharedPreferences("pref",MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
 
-        int zoomFactor = preferences.getInt("zoomFactor", 0);
+        int zoomFactor = preferences.getInt("zoomFactor", 2);
 
         //if zoom factor already at min (0), make it stay 0, else decrement.
 

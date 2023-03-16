@@ -11,11 +11,15 @@ import androidx.constraintlayout.widget.ConstraintSet;
 
 public class ZoomDisplay {
 
+    /*
+        This method displays the rings according to the zoom factor.
+     */
+
     public static void displayZoom(Activity activity) {
 
         SharedPreferences preferences = activity.getSharedPreferences("pref", Context.MODE_PRIVATE);
 
-        int zoomFactor = preferences.getInt("zoomFactor", 0);
+        int zoomFactor = preferences.getInt("zoomFactor", 2);
 
         //The counter will tell us how zoomed in we are.
         //Because we do not have saved locations implemented, this will help a lot
@@ -31,8 +35,6 @@ public class ZoomDisplay {
         ConstraintLayout.LayoutParams Circle2LayoutParams = (ConstraintLayout.LayoutParams) Circle2Layout.getLayoutParams();
         ConstraintLayout.LayoutParams Circle3LayoutParams = (ConstraintLayout.LayoutParams) Circle3Layout.getLayoutParams();
         ConstraintLayout.LayoutParams Circle4LayoutParams = (ConstraintLayout.LayoutParams) Circle4Layout.getLayoutParams();
-
-        //if-else statement until we can find something more efficient
 
         if (zoomFactor == 0) {
             //show all rings
@@ -103,7 +105,12 @@ public class ZoomDisplay {
         Circle4Layout.setLayoutParams(Circle4LayoutParams);
     }
 
-    //find radius given the zoom factor
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    /*
+        This method finds and returns the correct radius per circle for each zoom factor.
+        The circles change sizes, so the radius will as well.
+     */
 
     public static int radius (int Circle, int Zoom) {
 
