@@ -112,7 +112,7 @@ public class MainActivity extends AppCompatActivity {
                 if (timeDiff >= 5000){
                     locationService.active.postValue(false);
                     long timeLost = timeDiff;
-                    textView2.setText("GPS Signal Lost " + timeLost);
+                    textView2.setText("GPS Signal Lost " + TimeUnitConvert.formatMillisToHM(timeLost));
 
                 }
             });
