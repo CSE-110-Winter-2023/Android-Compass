@@ -30,7 +30,7 @@ import org.junit.runner.RunWith;
 
 @LargeTest
 @RunWith(AndroidJUnit4.class)
-public class ChangeUserLocationBDDTest {
+public class US4BDDTest {
 
     @Rule
     public ActivityScenarioRule<MainActivity> mActivityScenarioRule =
