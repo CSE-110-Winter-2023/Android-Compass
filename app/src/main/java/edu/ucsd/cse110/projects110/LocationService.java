@@ -15,9 +15,10 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 public class LocationService implements LocationListener {
+    public long currentTime;
+    public MutableLiveData<Boolean> active;
     private static LocationService instance;
     private Activity activity;
-
     private MutableLiveData<Pair<Double,Double>> locationValue;
 
     private final LocationManager locationManager;
@@ -33,6 +34,8 @@ public class LocationService implements LocationListener {
         this.activity=activity;
         this.locationManager=(LocationManager) activity.getSystemService(Context.LOCATION_SERVICE);
         this.registerLocationListener();
+        this.active = new MutableLiveData<>();
+        this.currentTime = System.currentTimeMillis();
     }
 
     private void registerLocationListener(){
@@ -53,6 +56,8 @@ public class LocationService implements LocationListener {
 
     @Override
     public void onLocationChanged(@NonNull Location location){
+        currentTime = System.currentTimeMillis();
+        this.active.postValue(true);
         this.locationValue.postValue(new Pair<Double,Double>(location.getLatitude(),
                 location.getLongitude()));
     }

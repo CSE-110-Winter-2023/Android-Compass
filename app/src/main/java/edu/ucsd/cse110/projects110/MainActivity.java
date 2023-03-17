@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModelProvider;
@@ -76,19 +77,45 @@ public class MainActivity extends AppCompatActivity {
         orientationService=OrientationService.singleton(this);
         TextView textViewO=(TextView) findViewById(R.id.curr_Orientation);
         TextView textView=(TextView) findViewById(R.id.curr_location);
+        TextView textView2=(TextView) findViewById(R.id.textView3);
 
         //viewModel is used for accessing database
         var viewModel = new ViewModelProvider(this).get(UserListViewModel.class);
         //everything in database here
         LiveData<List<User>> users= viewModel.getUsers();
-        //use for loop later to get all locations and their data for later UI update
-        locationService.getLocation().observe(this,loc->{
+        locationService.active.observe(this, bool ->{
+            if (bool){
+                textView2.setText("GPS Signal Active");
+                textView2.setTextColor(ContextCompat.getColor(this, android.R.color.holo_green_light));
+            }
+            if (!bool){
+//                textView2.setText("GPS Signal Lost");
+                textView2.setTextColor(ContextCompat.getColor(this, android.R.color.holo_red_dark));
+
+            }
+        });
+            //textView2.setTextColor(Integer.parseInt("#FF0000"));
+
+
+            //use for loop later to get all locations and their data for later UI update
+            locationService.getLocation().observe(this,loc->{
             String setCurrLoc = String.format("Current Location: %.2f, %.2f",loc.first, loc.second);
             editor.putString("OurLat", loc.first.toString());
             editor.putString("OurLong", loc.second.toString());
             editor.apply();
 
             textView.setText(setCurrLoc);
+            TimeService ts = new TimeService();
+            ts.getTime().observe(this, time ->{
+                long compTime = locationService.currentTime;
+                long timeDiff = time - compTime;
+                if (timeDiff >= 5000){
+                    locationService.active.postValue(false);
+                    long timeLost = timeDiff;
+                    textView2.setText("GPS Signal Lost " + timeLost);
+
+                }
+            });
             users.observe(this, userList -> {
                 for(User user:userList){
                     viewModel.getOrCreateUser(user.public_code);
@@ -100,7 +127,9 @@ public class MainActivity extends AppCompatActivity {
                     Log.i("Degree",Float.toString(f));
                 }
             });
+
         });
+
 
         orientationService.getOrientation().observe(this,Ori->{
             String setCurrOri =String.format("Current Orientation: %.2f",Ori);
