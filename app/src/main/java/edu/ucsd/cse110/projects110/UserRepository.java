@@ -17,7 +17,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
-public class UserRepository {
+public class UserRepository implements IUserRepository{
     private final UserDao dao;
     private ScheduledFuture<?> poller;
 

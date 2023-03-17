@@ -22,6 +22,7 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mock;
 
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
@@ -31,7 +32,9 @@ public class UserRepositoryTest {
     @Rule
     public InstantTaskExecutorRule instantTaskExecutorRule = new InstantTaskExecutorRule();
     private UserDatabase db;
+
     private UserDao userDao;
+    @Mock
     private UserRepository userRepository;
 
     @Before
@@ -76,8 +79,9 @@ public class UserRepositoryTest {
     @Test
     public void testGetRemote() throws InterruptedException {
         User user = new User("0192509125", "Alice", 32.7157, -117.1611);
-        userRepository.upsertRemote(user);
-        LiveData<User> remoteUser = userRepository.getRemote("0192509125");
+        MockUserRepository mockme = new MockUserRepository(userDao);
+        mockme.upsertRemote(user);
+        LiveData<User> remoteUser = mockme.getRemote("0192509125");
         final User[] remoteUserList = new User[1];
         remoteUser.observeForever(new Observer<User>() {
             @Override
